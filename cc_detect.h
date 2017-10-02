@@ -55,7 +55,7 @@
 // ----------------------------------------------------------------------------
 
 // ============================================================================
-// [CC_DETECT - Prologue]
+// [Guard]
 // ============================================================================
 
 #if !defined(CC_DETECT_H) || CC_DETECT_H < 20171010
@@ -67,7 +67,7 @@
 #define CC_DETECT_H 20171010
 
 // ============================================================================
-// [CC_DETECT - Cleanup]
+// [Cleanup]
 // ============================================================================
 
 #if defined(CC_DETECT_H_CLEANUP)
@@ -103,12 +103,12 @@
 # undef CC_HAS_DECLSPEC_NOINLINE
 # undef CC_HAS_DECLSPEC_NORETURN
 # undef CC_HAS_DECLTYPE
-# undef CC_HAS_DEFAULT_FUNCTION
-# undef CC_HAS_DELETE_FUNCTION
+# undef CC_HAS_DEFAULTED_FUNCTIONS
+# undef CC_HAS_DELETED_FUNCTIONS
 # undef CC_HAS_FORCEINLINE
 # undef CC_HAS_FINAL
 # undef CC_HAS_INITIALIZER_LIST
-# undef CC_HAS_LAMBDA
+# undef CC_HAS_LAMBDAS
 # undef CC_HAS_NATIVE_CHAR
 # undef CC_HAS_NATIVE_WCHAR_T
 # undef CC_HAS_NATIVE_CHAR16_T
@@ -116,7 +116,7 @@
 # undef CC_HAS_NOEXCEPT
 # undef CC_HAS_NULLPTR
 # undef CC_HAS_OVERRIDE
-# undef CC_HAS_RVALUE
+# undef CC_HAS_RVALUE_REFERENCES
 # undef CC_HAS_STATIC_ASSERT
 # undef CC_HAS_STRONG_ENUMS
 # undef CC_HAS_VARIADIC_TEMPLATES
@@ -178,7 +178,7 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// [CC_COMPILER - C++ Compiler Vendor]
+// [C++ Compiler Vendor]
 // ----------------------------------------------------------------------------
 
 #define CC_MAKE_VER(MAJOR, MINOR, PATCH) ((MAJOR) * 10000000 + (MINOR) * 100000 + (PATCH))
@@ -226,7 +226,7 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// [CC_CPLUSPLUS - C++ Version]
+// [C++ Version]
 // ----------------------------------------------------------------------------
 
 #if defined(__cplusplus)
@@ -244,7 +244,7 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// [CC_FEATURE - C++ Compiler Features]
+// [C++ Compiler Features]
 // ----------------------------------------------------------------------------
 
 #if CC_CLANG
@@ -267,12 +267,12 @@
 # define CC_HAS_DECLSPEC_NOINLINE       (0)
 # define CC_HAS_DECLSPEC_NORETURN       (0)
 # define CC_HAS_DECLTYPE                (__has_extension(__cxx_decltype__))
-# define CC_HAS_DEFAULT_FUNCTION        (__has_extension(__cxx_defaulted_functions__))
-# define CC_HAS_DELETE_FUNCTION         (__has_extension(__cxx_deleted_functions__))
+# define CC_HAS_DEFAULTED_FUNCTIONS     (__has_extension(__cxx_defaulted_functions__))
+# define CC_HAS_DELETED_FUNCTIONS       (__has_extension(__cxx_deleted_functions__))
 # define CC_HAS_FORCEINLINE             (0)
 # define CC_HAS_FINAL                   (__has_extension(__cxx_override_control__))
 # define CC_HAS_INITIALIZER_LIST        (__has_extension(__cxx_generalized_initializers__))
-# define CC_HAS_LAMBDA                  (__has_extension(__cxx_lambdas__))
+# define CC_HAS_LAMBDAS                 (__has_extension(__cxx_lambdas__))
 # define CC_HAS_NATIVE_CHAR             (1)
 # define CC_HAS_NATIVE_CHAR16_T         (__has_extension(__cxx_unicode_literals__))
 # define CC_HAS_NATIVE_CHAR32_T         (__has_extension(__cxx_unicode_literals__))
@@ -280,7 +280,7 @@
 # define CC_HAS_NOEXCEPT                (__has_extension(__cxx_noexcept__))
 # define CC_HAS_NULLPTR                 (__has_extension(__cxx_nullptr__))
 # define CC_HAS_OVERRIDE                (__has_extension(__cxx_override_control__))
-# define CC_HAS_RVALUE                  (__has_extension(__cxx_rvalue_references__))
+# define CC_HAS_RVALUE_REFERENCES       (__has_extension(__cxx_rvalue_references__))
 # define CC_HAS_STATIC_ASSERT           (__has_extension(__cxx_static_assert__))
 # define CC_HAS_STRONG_ENUMS            (__has_extension(__cxx_strong_enums__))
 # define CC_HAS_VARIADIC_TEMPLATES      (__has_extension(__cxx_variadic_templates__))
@@ -306,12 +306,12 @@
 # define CC_HAS_DECLSPEC_NOINLINE       (0)
 # define CC_HAS_DECLSPEC_NORETURN       (0)
 # define CC_HAS_DECLTYPE                (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_DEFAULT_FUNCTION        (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_DELETE_FUNCTION         (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_DELETED_FUNCTIONS       (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_FORCEINLINE             (0)
 # define CC_HAS_FINAL                   (CC_GNU >= CC_MAKE_VER(4, 7, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_INITIALIZER_LIST        (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_LAMBDA                  (CC_GNU >= CC_MAKE_VER(4, 5, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_LAMBDAS                 (CC_GNU >= CC_MAKE_VER(4, 5, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_NATIVE_CHAR             (1)
 # define CC_HAS_NATIVE_CHAR16_T         (CC_GNU >= CC_MAKE_VER(4, 5, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_NATIVE_CHAR32_T         (CC_GNU >= CC_MAKE_VER(4, 5, 0) && CC_CPLUSPLUS >= 201103L)
@@ -319,7 +319,7 @@
 # define CC_HAS_NOEXCEPT                (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_NULLPTR                 (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_OVERRIDE                (CC_GNU >= CC_MAKE_VER(4, 7, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_RVALUE                  (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_RVALUE_REFERENCES       (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_STATIC_ASSERT           (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_STRONG_ENUMS            (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_VARIADIC_TEMPLATES      (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
@@ -345,12 +345,12 @@
 # define CC_HAS_DECLSPEC_NOINLINE       (CC_INTEL_COMPAT_MODE == 0)
 # define CC_HAS_DECLSPEC_NORETURN       (CC_INTEL_COMPAT_MODE == 0)
 # define CC_HAS_DECLTYPE                (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
-# define CC_HAS_DEFAULT_FUNCTION        (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
-# define CC_HAS_DELETE_FUNCTION         (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
+# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
+# define CC_HAS_DELETED_FUNCTIONS       (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
 # define CC_HAS_FORCEINLINE             (CC_INTEL_COMPAT_MODE == 0)
 # define CC_HAS_FINAL                   (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
 # define CC_HAS_INITIALIZER_LIST        (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
-# define CC_HAS_LAMBDA                  (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
+# define CC_HAS_LAMBDAS                 (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
 # define CC_HAS_NATIVE_CHAR             (1)
 # define CC_HAS_NATIVE_CHAR16_T         (CC_INTEL >= CC_MAKE_VER(14, 0, 0) || (CC_INTEL_COMPAT_MODE > 0 && CC_INTEL >= CC_MAKE_VER(12, 6, 0)))
 # define CC_HAS_NATIVE_CHAR32_T         (CC_INTEL >= CC_MAKE_VER(14, 0, 0) || (CC_INTEL_COMPAT_MODE > 0 && CC_INTEL >= CC_MAKE_VER(12, 6, 0)))
@@ -358,7 +358,7 @@
 # define CC_HAS_NOEXCEPT                (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
 # define CC_HAS_NULLPTR                 (CC_INTEL >= CC_MAKE_VER(12, 6, 0))
 # define CC_HAS_OVERRIDE                (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
-# define CC_HAS_RVALUE                  (CC_INTEL >= CC_MAKE_VER(11,10, 0))
+# define CC_HAS_RVALUE_REFERENCES       (CC_INTEL >= CC_MAKE_VER(11,10, 0))
 # define CC_HAS_STATIC_ASSERT           (CC_INTEL >= CC_MAKE_VER(11,10, 0))
 # define CC_HAS_STRONG_ENUMS            (CC_INTEL >= CC_MAKE_VER(13, 0, 0))
 # define CC_HAS_VARIADIC_TEMPLATES      (CC_INTEL >= CC_MAKE_VER(12, 6, 0))
@@ -384,12 +384,12 @@
 # define CC_HAS_DECLSPEC_NOINLINE       (1)
 # define CC_HAS_DECLSPEC_NORETURN       (1)
 # define CC_HAS_DECLTYPE                (CC_MSC >= CC_MAKE_VER(16, 0, 0))
-# define CC_HAS_DEFAULT_FUNCTION        (CC_MSC >= CC_MAKE_VER(18, 0, 0))
-# define CC_HAS_DELETE_FUNCTION         (CC_MSC >= CC_MAKE_VER(18, 0, 0))
+# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_MSC >= CC_MAKE_VER(18, 0, 0))
+# define CC_HAS_DELETED_FUNCTIONS       (CC_MSC >= CC_MAKE_VER(18, 0, 0))
 # define CC_HAS_FORCEINLINE             (1)
 # define CC_HAS_FINAL                   (CC_MSC >= CC_MAKE_VER(14, 0, 0))
 # define CC_HAS_INITIALIZER_LIST        (CC_MSC >= CC_MAKE_VER(18, 0, 0))
-# define CC_HAS_LAMBDA                  (CC_MSC >= CC_MAKE_VER(16, 0, 0))
+# define CC_HAS_LAMBDAS                 (CC_MSC >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_NATIVE_CHAR             (1)
 # define CC_HAS_NATIVE_CHAR16_T         (CC_MSC >= CC_MAKE_VER(19, 0, 0))
 # define CC_HAS_NATIVE_CHAR32_T         (CC_MSC >= CC_MAKE_VER(19, 0, 0))
@@ -401,14 +401,14 @@
 # define CC_HAS_NOEXCEPT                (CC_MSC >= CC_MAKE_VER(19, 0, 0))
 # define CC_HAS_NULLPTR                 (CC_MSC >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_OVERRIDE                (CC_MSC >= CC_MAKE_VER(14, 0, 0))
-# define CC_HAS_RVALUE                  (CC_MSC >= CC_MAKE_VER(16, 0, 0))
+# define CC_HAS_RVALUE_REFERENCES       (CC_MSC >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_STATIC_ASSERT           (CC_MSC >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_STRONG_ENUMS            (CC_MSC >= CC_MAKE_VER(14, 0, 0))
 # define CC_HAS_VARIADIC_TEMPLATES      (CC_MSC >= CC_MAKE_VER(18, 0, 0))
 #endif
 
 // ----------------------------------------------------------------------------
-// [CC_ARCH - Target CPU Architecture]
+// [Target CPU Architecture]
 // ----------------------------------------------------------------------------
 
 #if (defined(_M_X64  ) || defined(__x86_64) || defined(__x86_64__) || \
@@ -449,7 +449,7 @@
 #define CC_ARCH_BE          (!(CC_ARCH_LE))
 
 // ----------------------------------------------------------------------------
-// [CC_OS - Target Operating System]
+// [Target Operating System]
 // ----------------------------------------------------------------------------
 
 #if defined(_WIN32) || defined(_WINDOWS)
@@ -524,7 +524,7 @@
 #define CC_OS_BSD           (CC_OS_FREEBSD || CC_OS_DRAGONFLYBSD  || CC_OS_NETBSD || CC_OS_OPENBSD || CC_OS_MAC)
 
 // ----------------------------------------------------------------------------
-// [CC_EXPORT | CC_IMPORT - Export|Import the decorated function]
+// [Visibility - Export|Import]
 // ----------------------------------------------------------------------------
 
 #if CC_OS_WINDOWS
@@ -546,7 +546,7 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// [CC_CALLCONV]
+// [Function Attributes & Calling Conventions]
 // ----------------------------------------------------------------------------
 
 #if CC_ARCH_X86
@@ -568,8 +568,33 @@
 # define CC_REGPARM(N)
 #endif
 
+#if CC_HAS_ATTRIBUTE_ALWAYS_INLINE
+# define CC_FORCEINLINE inline __attribute__((__always_inline__))
+#elif CC_HAS_FORCEINLINE
+# define CC_FORCEINLINE __forceinline
+#else
+# define CC_FORCEINLINE inline
+#endif
+
+#if CC_HAS_ATTRIBUTE_NOINLINE
+# define CC_NOINLINE __attribute__((__noinline__))
+#elif CC_HAS_DECLSPEC_NOINLINE
+# define CC_NOINLINE __declspec(noinline)
+#else
+# define CC_NOINLINE
+#endif
+
+#if CC_HAS_ATTRIBUTE_NORETURN
+# define CC_NORETURN __attribute__((__noreturn__))
+#elif CC_HAS_DECLSPEC_NORETURN
+# define CC_NORETURN __declspec(noreturn)
+#else
+# define CC_NORETURN
+#endif
+
+
 // ----------------------------------------------------------------------------
-// [CC_LIKELY(EXP) | CC_UNLIKELY(EXP)]
+// [Likely | Unlikely]
 // ----------------------------------------------------------------------------
 
 #if CC_HAS_BUILTIN_EXPECT
@@ -596,7 +621,7 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// [CC_ASSUME(EXP) - Assume that the expression `EXP` is always true]
+// [Assumptions]
 // ----------------------------------------------------------------------------
 
 #if CC_HAS_ASSUME
@@ -609,10 +634,6 @@
 # define CC_ASSUME(EXP) ((void)0)
 #endif
 
-// ----------------------------------------------------------------------------
-// [CC_ASSUME_ALIGNED - Assume that the pointer `PTR` is aligned to at least `N_ALIGN` bytes]
-// ----------------------------------------------------------------------------
-
 #if CC_HAS_ASSUME_ALIGNED
 # define CC_ASSUME_ALIGNED(PTR, N_ALIGN) __assume_aligned(PTR, N_ALIGN)
 #elif CC_HAS_BUILTIN_ASSUME_ALIGNED
@@ -622,8 +643,10 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// [CC_FALLTHROUGH - The code falls through annotation (switch / case)]
+// [Annotations]
 // ----------------------------------------------------------------------------
+
+#define CC_UNUSED(X) (void)(X)
 
 #if CC_CLANG && CC_CPLUSPLUS >= 201103L
 # define CC_FALLTHROUGH [[clang::fallthrough]]
@@ -634,61 +657,14 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// [CC_FORCEINLINE -  Always inline the decorated function]
-// ----------------------------------------------------------------------------
-
-#if CC_HAS_ATTRIBUTE_ALWAYS_INLINE
-# define CC_FORCEINLINE inline __attribute__((__always_inline__))
-#elif CC_HAS_FORCEINLINE
-# define CC_FORCEINLINE __forceinline
-#else
-# define CC_FORCEINLINE inline
-#endif
-
-// ----------------------------------------------------------------------------
-// [CC_NOINLINE - Never inline the decorated function]
-// ----------------------------------------------------------------------------
-
-#if CC_HAS_ATTRIBUTE_NOINLINE
-# define CC_NOINLINE __attribute__((__noinline__))
-#elif CC_HAS_DECLSPEC_NOINLINE
-# define CC_NOINLINE __declspec(noinline)
-#else
-# define CC_NOINLINE
-#endif
-
-// ----------------------------------------------------------------------------
-// [CC_NORETURN - The decorated function never returns (exit, assertion, etc...)]
-// ----------------------------------------------------------------------------
-
-#if CC_HAS_ATTRIBUTE_NORETURN
-# define CC_NORETURN __attribute__((__noreturn__))
-#elif CC_HAS_DECLSPEC_NORETURN
-# define CC_NORETURN __declspec(noreturn)
-#else
-# define CC_NORETURN
-#endif
-
-// ----------------------------------------------------------------------------
-// [CC_UNUSED - Mark a variable X as unused]
-// ----------------------------------------------------------------------------
-
-#define CC_UNUSED(X) (void)(X)
-
-// ----------------------------------------------------------------------------
-// [CC_ARRAY_SIZE - Get a length of an array at compile-time]
+// [Other General Purpose Macros]
 // ----------------------------------------------------------------------------
 
 #define CC_ARRAY_SIZE(X) (sizeof(X) / sizeof((X)[0]))
-
-// ----------------------------------------------------------------------------
-// [CC_OFFSET_OF - Get the offset of a member y of a struct x at compile-time]
-// ----------------------------------------------------------------------------
-
 #define CC_OFFSET_OF(STRUCT, MEMBER) ((size_t)((const char*)&((const STRUCT*)0x1)->MEMBER) - 1)
 
 // ============================================================================
-// [CC_DETECT - Epilogue]
+// [Guard]
 // ============================================================================
 
 #endif

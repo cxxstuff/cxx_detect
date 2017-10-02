@@ -20,6 +20,11 @@ Compiler-neutral macros:
 
 This project is dual licensed under **PUBLIC DOMAIN** and **ZLIB** licenses. ZLIB is provided for those that cannot use PUBLIC DOMAIN. Contributing to this project means that you agree with the licensing and that you make the contribution available under BOTH licenses mentioned.
 
+Disclaimer
+----------
+
+**CC_DETECT project just started, if you found anything wrong (especially macro names) it would be good to report it now as there is still a chance to fix it without breaking others code. Future versions will remain stable.**
+
 Design
 ------
 
@@ -68,10 +73,10 @@ Each compiler-vendor constant contains either 0, which means the compiler was no
 
 Additionally the following constants are provided:
 
-  * **CC_MINGW** - 0 if not MINGW, 32 (**__MINGW32__**), or 64 (**__MINGW64__**)
+  * **CC_MINGW** - 0 if not MINGW, 32 if `__MINGW32__` is defined, or 64 if `__MINGW64__` is defined
   * **CC_INTEL_COMPAT_MODE** - Intel compiler is in GNU/Clang compatibility mode (1) or not (0).
 
-The compilers are checked the following way
+The compilers are checked the following way:
 
 ```c++
 #if CC_MSC
@@ -105,38 +110,38 @@ C/C++ Compiler Features
 
   * **CC_HAS_ALIGNAS**                 - `alignas` keyword.
   * **CC_HAS_ALIGNOF**                 - `alignof` keyword.
-  * **CC_HAS_ATTRIBUTE**               - `__attribute__` is generally supported by the compiler.
-  * **CC_HAS_ATTRIBUTE_ALIGNED**       - `__attribute__(__aligned__)` vendor-specific attribute.
-  * **CC_HAS_ATTRIBUTE_ALWAYS_INLINE** - `__attribute__(__always_inline__)` vendor-specific attribute.
-  * **CC_HAS_ATTRIBUTE_NOINLINE**      - `__attribute__(__aligned__)` vendor-specific attribute.
-  * **CC_HAS_ATTRIBUTE_NORETURN**      - `__attribute__(__noreturn__)` vendor-specific attribute.
-  * **CC_HAS_ATTRIBUTE_OPTIMIZE**      - `__attribute__(__optimize__)` vendor-specific attribute.
-  * **CC_HAS_BUILTIN_ASSUME**          - `__builtin_assume()` vendor-specific keyword.
-  * **CC_HAS_BUILTIN_ASSUME_ALIGNED**  - `__builtin_assume_aligned()` vendor-specific keyword.
-  * **CC_HAS_BUILTIN_EXPECT**          - `__builtin_expect()` vendor-specific keyword.
-  * **CC_HAS_BUILTIN_UNREACHABLE**     - `__builtin_unreachable()` vendor-specific keyword.
+  * **CC_HAS_ATTRIBUTE**               - `__attribute__` in general.
+  * **CC_HAS_ATTRIBUTE_ALIGNED**       - `__attribute__(__aligned__)`.
+  * **CC_HAS_ATTRIBUTE_ALWAYS_INLINE** - `__attribute__(__always_inline__)`.
+  * **CC_HAS_ATTRIBUTE_NOINLINE**      - `__attribute__(__aligned__)`.
+  * **CC_HAS_ATTRIBUTE_NORETURN**      - `__attribute__(__noreturn__)`.
+  * **CC_HAS_ATTRIBUTE_OPTIMIZE**      - `__attribute__(__optimize__)`.
+  * **CC_HAS_BUILTIN_ASSUME**          - `__builtin_assume()`.
+  * **CC_HAS_BUILTIN_ASSUME_ALIGNED**  - `__builtin_assume_aligned()`.
+  * **CC_HAS_BUILTIN_EXPECT**          - `__builtin_expect()`.
+  * **CC_HAS_BUILTIN_UNREACHABLE**     - `__builtin_unreachable()`.
   * **CC_HAS_CONSTEXPR**               - `constexpr` keyword.
-  * **CC_HAS_DECLSPEC_ALIGN**          - `__declspec(align)` vendor-specific attribute.
-  * **CC_HAS_DECLSPEC_NOINLINE**       - `__declspec(noinline)` vendor-specific attribute.
-  * **CC_HAS_DECLSPEC_NORETURN**       - `__declspec(noreturn)` vendor-specific attribute.
+  * **CC_HAS_DECLSPEC_ALIGN**          - `__declspec(align)` attribute.
+  * **CC_HAS_DECLSPEC_NOINLINE**       - `__declspec(noinline)` attribute.
+  * **CC_HAS_DECLSPEC_NORETURN**       - `__declspec(noreturn)` attribute.
   * **CC_HAS_DECLTYPE**                - `decltype` keyword.
-  * **CC_HAS_DEFAULT_FUNCTION**        - Default function feature.
-  * **CC_HAS_DELETE_FUNCTION**         - Delete function feature.
+  * **CC_HAS_DEFAULTED_FUNCTIONS**     - Defaulted functions.
+  * **CC_HAS_DELETED_FUNCTIONS**       - Deleted functions.
   * **CC_HAS_FINAL**                   - `final` keyword.
   * **CC_HAS_FORCEINLINE**             - `__forceinline` keyword.
-  * **CC_HAS_INITIALIZER_LIST**        - C++ initializer list feature.
-  * **CC_HAS_LAMBDA**                  - C++ lambda functions.
-  * **CC_HAS_NATIVE_CHAR**             - C++ has a native `char` type (`char`, `signed char`, and `unsigned char` are different types in such case).
-  * **CC_HAS_NATIVE_WCHAR_T**          - C++ has a native `wchar_t` type.
-  * **CC_HAS_NATIVE_CHAR16_T**         - C++ has a native `char16_t` type.
-  * **CC_HAS_NATIVE_CHAR32_T**         - C++ has a native `char32_t` type.
+  * **CC_HAS_INITIALIZER_LIST**        - Initializer list.
+  * **CC_HAS_LAMBDAS**                 - Lambda functions.
+  * **CC_HAS_NATIVE_CHAR**             - Native `char` type (`char`, `signed char`, and `unsigned char` are different types in such case).
+  * **CC_HAS_NATIVE_WCHAR_T**          - Native `wchar_t` type.
+  * **CC_HAS_NATIVE_CHAR16_T**         - Native `char16_t` type.
+  * **CC_HAS_NATIVE_CHAR32_T**         - Native `char32_t` type.
   * **CC_HAS_NOEXCEPT**                - `noexcept` keyword.
   * **CC_HAS_NULLPTR**                 - `nullptr` keyword.
   * **CC_HAS_OVERRIDE**                - `override` keyword.
-  * **CC_HAS_RVALUE**                  - C++ supports rvalues and move semantics.
-  * **CC_HAS_STATIC_ASSERT**           - C++ supports `static_assert` keyword.
-  * **CC_HAS_STRONG_ENUMS**            - C++ supports strong enums.
-  * **CC_HAS_VARIADIC_TEMPLATES**      - C++ supports variadic templates.
+  * **CC_HAS_RVALUE_REFERENCES**       - RValue references & move semantics.
+  * **CC_HAS_STATIC_ASSERT**           - `static_assert` keyword.
+  * **CC_HAS_STRONG_ENUMS**            - Strongly typed enums.
+  * **CC_HAS_VARIADIC_TEMPLATES**      - Variadic templates.
 
 Since all macros are defined, just their constants differ, features can be checked the following way:
 
@@ -208,8 +213,8 @@ Additionally the following constants are provided:
   * **CC_OS_SOLARIS**                  - Solaris.
   * **CC_OS_CYGWIN**                   - Cygwin.
 
-API Visibility (Import | Export)
---------------------------------
+Visibility (Import | Export)
+----------------------------
 
   * **CC_IMPORT**                      - Mark API to be imported.
   * **CC_EXPORT**                      - Mark API to be exported.
@@ -233,13 +238,21 @@ class SomeClass {
 }
 ```
 
-Calling Conventions
--------------------
+Function Attributes & Calling Conventions
+-----------------------------------------
+
+Calling Conventions:
 
   * **CC_CDECL**                      - CDECL calling convention.
   * **CC_STDCALL**                    - STDCALL calling convention.
   * **CC_FASTCALL**                   - FASTCALL calling convention.
   * **CC_REGPARM(N)**                 - REGPARM(N) calling convention (GCC and Clang).
+
+Function Attributes:
+
+  * **CC_FORCEINLINE**                - Force to always inline a certain function.
+  * **CC_NOINLINE**                   - Force to never inline a certain function.
+  * **CC_NORETURN**                   - Function never returns.
 
 Example:
 
@@ -251,6 +264,29 @@ void CC_CDECL SomeFuncImpl(int x, int y) {}
 
 // Will use __attribute__((regparm(3))) if available, nothing otherwise.
 int CC_REGPARM(3) ExplicitRegParm3Func(int x, int y, int z) { return x + y + z; }
+
+// Enforced to be always inlined.
+CC_FORCEINLINE uint32_t PerformanceCriticalFunction(uint32_t x, uint32_t y) {}
+
+// Enforced to be never inlined.
+CC_NOINLINE uint32_t FunctionThatShouldNeverBeInlined(uint32_t x, uint32_t y) {}
+
+// Never returns.
+CC_NORETURN void Crash() { ::abort(); }
+
+uint32_t SomeFunc(void *p) {
+  if (CC_LIKELY(p)) {
+    // Expected code-path.
+    return 0;
+  }
+  else {
+    // Runtime error. Since Crash() is decorated by CC_NORETURN the
+    // compiler knows it will never return and will not emit warning
+    // about a missing `return`.
+    Crash();
+  }
+}
+
 ```
 
 Likely / Unlikely
@@ -275,8 +311,8 @@ void SomeFunc(uint8_t* array, size_t size) {
 }
 ```
 
-Assume
-------
+Assumptions
+-----------
 
   * **CC_ASSUME(EXP)**                - Assume certain expression must always be true.
   * **CC_ASSUME_ALIGNED(PTR, N)**     - Assume the `PTR` is aligned to at least `N` bytes. NOTE that `N` must be equal or greater than the natural alignment of `PTR`.
@@ -306,60 +342,11 @@ uint32_t SomeFunc(const uint8_t* array, size_t size) {
 }
 ```
 
-Fallthrough
+Annotations
 -----------
 
-  * **CC_FALLTHROUGH**                - Tell the compiler that it's a fallthrough from one switch case to another. Required by new compilers otherwise they would warn about it.
-
-Example:
-
-```c++
-switch (...) {
-  case 0:
-    callCase0();
-    // Modern compiler would warn you without explicit `CC_FALLTHROUGH`.
-    CC_FALLTHROUGH;
-  case 1:
-    callCase1();
-    ...
-}
-```
-
-Other Function Attributes
--------------------------
-
-  * **CC_FORCEINLINE**                - Force to always inline a certain function.
-  * **CC_NOINLINE**                   - Force to never inline a certain function.
-  * **CC_NORETURN**                   - Function never returns.
-
-Example:
-
-```c++
-CC_FORCEINLINE uint32_t PerformanceCriticalFunction(uint32_t x, uint32_t y) {}
-CC_NOINLINE uint32_t FunctionThatShouldNeverBeInlined(uint32_t x, uint32_t y) {}
-CC_NORETURN void Crash() {}
-
-uint32_t SomeFunc(void *p) {
-  if (CC_LIKELY(p)) {
-    // Expected code-path.
-    return 0;
-  }
-  else {
-    // Runtime error. Since Crash() is decorated by CC_NORETURN the
-    // compiler knows it will never return and will not emit warning
-    // about a missing `return`.
-    Crash();
-  }
-}
-
-```
-
-Other General Purpose Macros
-----------------------------
-
   * **CC_UNUSED(X)**                  - Mark a variable or function argument as possibly unused.
-  * **CC_ARRAY_SIZE(X)**              - Get number of elements of an array at a compile time.
-  * **CC_OFFSET_OF(STRUCT, MEMBER)**  - Get an offset of `MEMBER` in `STRUCT`.
+  * **CC_FALLTHROUGH**                - Tell the compiler that it's a fallthrough from one switch case to another. Required by new compilers otherwise they would warn about it.
 
 Example:
 
@@ -369,12 +356,28 @@ uint32_t FuncWithUnusedArgument(uint32_t x, uint32_t y) {
   return y;
 }
 
-void FuncThatUsesArraySize() {
-  uint32_t array[32];
-  for (size_t i = 0; i < CC_ARRAY_SIZE(array); i++)
-    array[i] = uint32_t(i);
+void FuncWithExplicitFallThrough(uint32_t x) {
+  switch (x) {
+    case 0:
+      DoSomething();
+      // Modern compiler would warn you without explicit `CC_FALLTHROUGH`.
+      CC_FALLTHROUGH;
+    case 1:
+      DoSomethingElse();
+      break;
+  }
 }
+```
 
+Other General Purpose Macros
+----------------------------
+
+  * **CC_ARRAY_SIZE(X)**              - Get number of elements of an array at a compile time.
+  * **CC_OFFSET_OF(STRUCT, MEMBER)**  - Get an offset of `MEMBER` in `STRUCT`.
+
+Example:
+
+```c++
 struct Point {
   double x, y;
 };
@@ -384,4 +387,9 @@ void FuncThatUsesOffsetOf() {
   printf("Offset of 'Point.y' %u\n", unsigned(CC_OFFSET_OF(Point, y)));
 }
 
+void FuncThatUsesArraySize() {
+  uint32_t array[32];
+  for (size_t i = 0; i < CC_ARRAY_SIZE(array); i++)
+    array[i] = uint32_t(i);
+}
 ```
