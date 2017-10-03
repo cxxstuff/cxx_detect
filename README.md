@@ -66,15 +66,15 @@ C/C++ Compiler Vendor and Version
 
 Each compiler-vendor constant contains either 0, which means the compiler was not detected, or non-zero value, which represents a normalized compiler version.
 
-  * **CC_CLANG** - Clang C/C++ compiler
-  * **CC_GNU**   - GNU C/C++ compiler
-  * **CC_INTEL** - Intel C/C++ compiler (ICC)
-  * **CC_MSC**   - Microsoft C/C++ compiler (MSC)
+  * `CC_CLANG` - Clang C/C++ compiler
+  * `CC_GNU`   - GNU C/C++ compiler
+  * `CC_INTEL` - Intel C/C++ compiler (ICC)
+  * `CC_MSC`   - Microsoft C/C++ compiler (MSC)
 
 Additionally the following constants are provided:
 
-  * **CC_MINGW** - 0 if not MINGW, 32 if `__MINGW32__` is defined, or 64 if `__MINGW64__` is defined
-  * **CC_INTEL_COMPAT_MODE** - Intel compiler is in GNU/Clang compatibility mode (1) or not (0).
+  * `CC_MINGW` - 0 if not MINGW, 32 if `__MINGW32__` is defined, or 64 if `__MINGW64__` is defined
+  * `CC_INTEL_COMPAT_MODE` - Intel compiler is in GNU/Clang compatibility mode (1) or not (0).
 
 The compilers are checked the following way:
 
@@ -108,40 +108,61 @@ C/C++ Language Version
 C/C++ Compiler Features
 -----------------------
 
-  * **CC_HAS_ALIGNAS**                 - `alignas` keyword.
-  * **CC_HAS_ALIGNOF**                 - `alignof` keyword.
-  * **CC_HAS_ATTRIBUTE**               - `__attribute__` in general.
-  * **CC_HAS_ATTRIBUTE_ALIGNED**       - `__attribute__(__aligned__)`.
-  * **CC_HAS_ATTRIBUTE_ALWAYS_INLINE** - `__attribute__(__always_inline__)`.
-  * **CC_HAS_ATTRIBUTE_NOINLINE**      - `__attribute__(__aligned__)`.
-  * **CC_HAS_ATTRIBUTE_NORETURN**      - `__attribute__(__noreturn__)`.
-  * **CC_HAS_ATTRIBUTE_OPTIMIZE**      - `__attribute__(__optimize__)`.
-  * **CC_HAS_BUILTIN_ASSUME**          - `__builtin_assume()`.
-  * **CC_HAS_BUILTIN_ASSUME_ALIGNED**  - `__builtin_assume_aligned()`.
-  * **CC_HAS_BUILTIN_EXPECT**          - `__builtin_expect()`.
-  * **CC_HAS_BUILTIN_UNREACHABLE**     - `__builtin_unreachable()`.
-  * **CC_HAS_CONSTEXPR**               - `constexpr` keyword.
-  * **CC_HAS_DECLSPEC_ALIGN**          - `__declspec(align)` attribute.
-  * **CC_HAS_DECLSPEC_NOINLINE**       - `__declspec(noinline)` attribute.
-  * **CC_HAS_DECLSPEC_NORETURN**       - `__declspec(noreturn)` attribute.
-  * **CC_HAS_DECLTYPE**                - `decltype` keyword.
-  * **CC_HAS_DEFAULTED_FUNCTIONS**     - Defaulted functions.
-  * **CC_HAS_DELETED_FUNCTIONS**       - Deleted functions.
-  * **CC_HAS_FINAL**                   - `final` keyword.
-  * **CC_HAS_FORCEINLINE**             - `__forceinline` keyword.
-  * **CC_HAS_INITIALIZER_LIST**        - Initializer list.
-  * **CC_HAS_LAMBDAS**                 - Lambda functions.
-  * **CC_HAS_NATIVE_CHAR**             - Native `char` type (`char`, `signed char`, and `unsigned char` are different types in such case).
-  * **CC_HAS_NATIVE_WCHAR_T**          - Native `wchar_t` type.
-  * **CC_HAS_NATIVE_CHAR16_T**         - Native `char16_t` type.
-  * **CC_HAS_NATIVE_CHAR32_T**         - Native `char32_t` type.
-  * **CC_HAS_NOEXCEPT**                - `noexcept` keyword.
-  * **CC_HAS_NULLPTR**                 - `nullptr` keyword.
-  * **CC_HAS_OVERRIDE**                - `override` keyword.
-  * **CC_HAS_RVALUE_REFERENCES**       - RValue references & move semantics.
-  * **CC_HAS_STATIC_ASSERT**           - `static_assert` keyword.
-  * **CC_HAS_STRONG_ENUMS**            - Strongly typed enums.
-  * **CC_HAS_VARIADIC_TEMPLATES**      - Variadic templates.
+Vendor Specific:
+
+  * `CC_HAS_ASSUME`                  - `__assume` keyword.
+  * `CC_HAS_ASSUME_ALIGNED`          - `__assume_aligned` keyword.
+  * `CC_HAS_ATTRIBUTE`               - `__attribute__` in general.
+  * `CC_HAS_ATTRIBUTE_ALIGNED`       - `__attribute__(__aligned__)`.
+  * `CC_HAS_ATTRIBUTE_ALWAYS_INLINE` - `__attribute__(__always_inline__)`.
+  * `CC_HAS_ATTRIBUTE_NOINLINE`      - `__attribute__(__aligned__)`.
+  * `CC_HAS_ATTRIBUTE_NORETURN`      - `__attribute__(__noreturn__)`.
+  * `CC_HAS_ATTRIBUTE_OPTIMIZE`      - `__attribute__(__optimize__)`.
+  * `CC_HAS_BUILTIN_ASSUME`          - `__builtin_assume()`.
+  * `CC_HAS_BUILTIN_ASSUME_ALIGNED`  - `__builtin_assume_aligned()`.
+  * `CC_HAS_BUILTIN_EXPECT`          - `__builtin_expect()`.
+  * `CC_HAS_BUILTIN_UNREACHABLE`     - `__builtin_unreachable()`.
+  * `CC_HAS_DECLSPEC_ALIGN`          - `__declspec(align)`.
+  * `CC_HAS_DECLSPEC_NOINLINE`       - `__declspec(noinline)`.
+  * `CC_HAS_DECLSPEC_NORETURN`       - `__declspec(noreturn)`.
+  * `CC_HAS_FORCEINLINE`             - `__forceinline` keyword.
+
+Standardized:
+
+  * `CC_HAS_AGGREGATE_NSDMI`         - Default initializers for aggregates (NSDMI) (C++14).
+  * `CC_HAS_ALIGNAS`                 - `alignas` keyword  (C++11).
+  * `CC_HAS_ALIGNOF`                 - `alignof` keyword  (C++11).
+  * `CC_HAS_AUTO_TYPE`               - `auto` type  (C++11).
+  * `CC_HAS_BINARY_LITERALS`         - Binary literals (C++14).
+  * `CC_HAS_CONSTEXPR`               - `constexpr` keyword (C++11).
+  * `CC_HAS_CONTEXTUAL_CONVERSIONS`  - Contextual conversions (C++14).
+  * `CC_HAS_DECLTYPE`                - `decltype` keyword  (C++11).
+  * `CC_HAS_DECLTYPE_AUTO`           - `decltype(auto)` support  (C++14).
+  * `CC_HAS_DEFAULTED_FUNCTIONS`     - Defaulted functions  (C++11).
+  * `CC_HAS_DELEGATING_CONSTRUCTORS` - Delegating constructors  (C++11).
+  * `CC_HAS_DELETED_FUNCTIONS`       - Deleted functions  (C++11).
+  * `CC_HAS_FINAL`                   - `final` keyword  (C++11).
+  * `CC_HAS_GENERIC_LAMBDAS`         - Generic lambdas (C++14).
+  * `CC_HAS_INIT_CAPTURES`           - Generalized lambda capture (init-capture) (C++14)
+  * `CC_HAS_INITIALIZER_LISTS`       - Initializer lists  (C++11).
+  * `CC_HAS_INLINE_NAMESPACES`       - Inline namespaces  (C++11).
+  * `CC_HAS_LAMBDAS`                 - Lambda functions  (C++11).
+  * `CC_HAS_NATIVE_CHAR`             - Native `char` type (`char`, `signed char`, and `unsigned char` are different types in such case).
+  * `CC_HAS_NATIVE_WCHAR_T`          - Native `wchar_t` type.
+  * `CC_HAS_NATIVE_CHAR16_T`         - Native `char16_t` type  (C++11).
+  * `CC_HAS_NATIVE_CHAR32_T`         - Native `char32_t` type  (C++11).
+  * `CC_HAS_NOEXCEPT`                - `noexcept` keyword  (C++11).
+  * `CC_HAS_NULLPTR`                 - `nullptr` keyword  (C++11).
+  * `CC_HAS_OVERRIDE`                - `override` keyword  (C++11).
+  * `CC_HAS_RANGE_FOR`               - Range-based for-loop (C++11).
+  * `CC_HAS_RELAXED_CONSTEXPR`       - Relaxed `constexpr` (C++14).
+  * `CC_HAS_RVALUE_REFERENCES`       - RValue references & move semantics  (C++11).
+  * `CC_HAS_STATIC_ASSERT`           - `static_assert` keyword  (C++11).
+  * `CC_HAS_STRONG_ENUMS`            - Strongly typed enums  (C++11).
+  * `CC_HAS_THREAD_LOCAL`            - `thread_local` keyword  (C++11).
+  * `CC_HAS_UNRESTRICTED_UNIONS`     - Unrestricted unions  (C++11).
+  * `CC_HAS_VARIABLE_TEMPLATES`      - Variable templates  (C++14).
+  * `CC_HAS_VARIADIC_TEMPLATES`      - Variadic templates  (C++11).
 
 Since all macros are defined, just their constants differ, features can be checked the following way:
 
@@ -168,16 +189,16 @@ class SomeClass {
 Target Architecture
 -------------------
 
-  * **CC_ARCH_X86**                    - Target architecture is 32-bit x86 (X86|IA32).
-  * **CC_ARCH_X64**                    - Target architecture is 64-bit x86_64 (X64|AMD64).
-  * **CC_ARCH_ARM32**                  - Target architecture is 32-bit ARM or AArch32.
-  * **CC_ARCH_ARM64**                  - Target architecture is 64-bit AArch64.
+  * `CC_ARCH_X86`                    - Target architecture is 32-bit x86 (X86|IA32).
+  * `CC_ARCH_X64`                    - Target architecture is 64-bit x86_64 (X64|AMD64).
+  * `CC_ARCH_ARM32`                  - Target architecture is 32-bit ARM or AArch32.
+  * `CC_ARCH_ARM64`                  - Target architecture is 64-bit AArch64.
 
 Additionally the following constants are provided:
 
-  * **CC_ARCH_BITS**                   - 32 or 64 depending on the architecture.
-  * **CC_ARCH_LE**                     - 1 if the target architecture is LITTLE ENDIAN, otherwise 0.
-  * **CC_ARCH_BE**                     - 1 if the target architecture is BIG ENDIAN, otherwise 0.
+  * `CC_ARCH_BITS`                   - 32 or 64 depending on the architecture.
+  * `CC_ARCH_LE`                     - 1 if the target architecture is LITTLE ENDIAN, otherwise 0.
+  * `CC_ARCH_BE`                     - 1 if the target architecture is BIG ENDIAN, otherwise 0.
 
 Architectures can be checked the following way:
 
@@ -196,28 +217,28 @@ Architectures can be checked the following way:
 Target Operating System
 -----------------------
 
-  * **CC_OS_BSD**                      - BSD, including MacOS, OpenBSD, FreeBSD, etc.
-  * **CC_OS_MAC**                      - MacOS.
-  * **CC_OS_LINUX**                    - Linux, including Android.
-  * **CC_OS_WINDOWS**                  - Windows.
+  * `CC_OS_BSD`                      - BSD, including MacOS, OpenBSD, FreeBSD, etc.
+  * `CC_OS_MAC`                      - MacOS.
+  * `CC_OS_LINUX`                    - Linux, including Android.
+  * `CC_OS_WINDOWS`                  - Windows.
 
 Additionally the following constants are provided:
 
-  * **CC_OS_IOS**                      - iOS.
-  * **CC_OS_ANDROID**                  - Android.
-  * **CC_OS_NETBSD**                   - NetBSD.
-  * **CC_OS_FREEBSD**                  - FreeBSD.
-  * **CC_OS_OPENBSD**                  - OpenBSD.
-  * **CC_OS_DRAGONFLYBSD**             - DragonFlyBSD.
-  * **CC_OS_QNX**                      - QNX.
-  * **CC_OS_SOLARIS**                  - Solaris.
-  * **CC_OS_CYGWIN**                   - Cygwin.
+  * `CC_OS_IOS`                      - iOS.
+  * `CC_OS_ANDROID`                  - Android.
+  * `CC_OS_NETBSD`                   - NetBSD.
+  * `CC_OS_FREEBSD`                  - FreeBSD.
+  * `CC_OS_OPENBSD`                  - OpenBSD.
+  * `CC_OS_DRAGONFLYBSD`             - DragonFlyBSD.
+  * `CC_OS_QNX`                      - QNX.
+  * `CC_OS_SOLARIS`                  - Solaris.
+  * `CC_OS_CYGWIN`                   - Cygwin.
 
 Visibility (Import | Export)
 ----------------------------
 
-  * **CC_IMPORT**                      - Mark API to be imported.
-  * **CC_EXPORT**                      - Mark API to be exported.
+  * `CC_IMPORT`                      - Mark API to be imported.
+  * `CC_EXPORT`                      - Mark API to be exported.
 
 Example:
 
@@ -243,16 +264,16 @@ Function Attributes & Calling Conventions
 
 Calling Conventions:
 
-  * **CC_CDECL**                      - CDECL calling convention.
-  * **CC_STDCALL**                    - STDCALL calling convention.
-  * **CC_FASTCALL**                   - FASTCALL calling convention.
-  * **CC_REGPARM(N)**                 - REGPARM(N) calling convention (GCC and Clang).
+  * `CC_CDECL`                      - CDECL calling convention.
+  * `CC_STDCALL`                    - STDCALL calling convention.
+  * `CC_FASTCALL`                   - FASTCALL calling convention.
+  * `CC_REGPARM(N)`                 - REGPARM(N) calling convention (GCC and Clang).
 
 Function Attributes:
 
-  * **CC_FORCEINLINE**                - Force to always inline a certain function.
-  * **CC_NOINLINE**                   - Force to never inline a certain function.
-  * **CC_NORETURN**                   - Function never returns.
+  * `CC_FORCEINLINE`                - Force to always inline a certain function.
+  * `CC_NOINLINE`                   - Force to never inline a certain function.
+  * `CC_NORETURN`                   - Function never returns.
 
 Example:
 
@@ -292,8 +313,8 @@ uint32_t SomeFunc(void *p) {
 Likely / Unlikely
 -----------------
 
-  * **CC_LIKELY**                     - Expression is likely to be true.
-  * **CC_UNLIKELY**                   - Expression is unlikely to be true.
+  * `CC_LIKELY`                     - Expression is likely to be true.
+  * `CC_UNLIKELY`                   - Expression is unlikely to be true.
 
 Used to tell compiler which code-paths are likely, improves error-handling performance:
 
@@ -314,8 +335,8 @@ void SomeFunc(uint8_t* array, size_t size) {
 Assumptions
 -----------
 
-  * **CC_ASSUME(EXP)**                - Assume certain expression must always be true.
-  * **CC_ASSUME_ALIGNED(PTR, N)**     - Assume the `PTR` is aligned to at least `N` bytes. NOTE that `N` must be equal or greater than the natural alignment of `PTR`.
+  * `CC_ASSUME(EXP)`                - Assume certain expression must always be true.
+  * `CC_ASSUME_ALIGNED(PTR, N)`     - Assume the `PTR` is aligned to at least `N` bytes. NOTE that `N` must be equal or greater than the natural alignment of `PTR`.
 
 Example:
 
@@ -345,8 +366,8 @@ uint32_t SomeFunc(const uint8_t* array, size_t size) {
 Annotations
 -----------
 
-  * **CC_UNUSED(X)**                  - Mark a variable or function argument as possibly unused.
-  * **CC_FALLTHROUGH**                - Tell the compiler that it's a fallthrough from one switch case to another. Required by new compilers otherwise they would warn about it.
+  * `CC_UNUSED(X)`                  - Mark a variable or function argument as possibly unused.
+  * `CC_FALLTHROUGH`                - Tell the compiler that it's a fallthrough from one switch case to another. Required by new compilers otherwise they would warn about it.
 
 Example:
 
@@ -372,8 +393,8 @@ void FuncWithExplicitFallThrough(uint32_t x) {
 Other General Purpose Macros
 ----------------------------
 
-  * **CC_ARRAY_SIZE(X)**              - Get number of elements of an array at a compile time.
-  * **CC_OFFSET_OF(STRUCT, MEMBER)**  - Get an offset of `MEMBER` in `STRUCT`.
+  * `CC_ARRAY_SIZE(X)`              - Get number of elements of an array at a compile time.
+  * `CC_OFFSET_OF(STRUCT, MEMBER)`  - Get an offset of `MEMBER` in `STRUCT`.
 
 Example:
 

@@ -86,8 +86,8 @@
 # undef CC_CPLUSPLUS
 
 // C/C++ compiler features.
-# undef CC_HAS_ALIGNAS
-# undef CC_HAS_ALIGNOF
+# undef CC_HAS_ASSUME
+# undef CC_HAS_ASSUME_ALIGNED
 # undef CC_HAS_ATTRIBUTE
 # undef CC_HAS_ATTRIBUTE_ALIGNED
 # undef CC_HAS_ATTRIBUTE_ALWAYS_INLINE
@@ -98,16 +98,28 @@
 # undef CC_HAS_BUILTIN_ASSUME_ALIGNED
 # undef CC_HAS_BUILTIN_EXPECT
 # undef CC_HAS_BUILTIN_UNREACHABLE
-# undef CC_HAS_CONSTEXPR
 # undef CC_HAS_DECLSPEC_ALIGN
 # undef CC_HAS_DECLSPEC_NOINLINE
 # undef CC_HAS_DECLSPEC_NORETURN
-# undef CC_HAS_DECLTYPE
-# undef CC_HAS_DEFAULTED_FUNCTIONS
-# undef CC_HAS_DELETED_FUNCTIONS
 # undef CC_HAS_FORCEINLINE
+
+# undef CC_HAS_AGGREGATE_NSDMI
+# undef CC_HAS_ALIGNAS
+# undef CC_HAS_ALIGNOF
+# undef CC_HAS_AUTO_TYPE
+# undef CC_HAS_BINARY_LITERALS
+# undef CC_HAS_CONSTEXPR
+# undef CC_HAS_CONTEXTUAL_CONVERSIONS
+# undef CC_HAS_DECLTYPE
+# undef CC_HAS_DECLTYPE_AUTO
+# undef CC_HAS_DEFAULTED_FUNCTIONS
+# undef CC_HAS_DELEGATING_CONSTRUCTORS
+# undef CC_HAS_DELETED_FUNCTIONS
 # undef CC_HAS_FINAL
-# undef CC_HAS_INITIALIZER_LIST
+# undef CC_HAS_GENERIC_LAMBDAS
+# undef CC_HAS_INIT_CAPTURES
+# undef CC_HAS_INITIALIZER_LISTS
+# undef CC_HAS_INLINE_NAMESPACES
 # undef CC_HAS_LAMBDAS
 # undef CC_HAS_NATIVE_CHAR
 # undef CC_HAS_NATIVE_WCHAR_T
@@ -116,9 +128,13 @@
 # undef CC_HAS_NOEXCEPT
 # undef CC_HAS_NULLPTR
 # undef CC_HAS_OVERRIDE
+# undef CC_HAS_RANGE_FOR
 # undef CC_HAS_RVALUE_REFERENCES
 # undef CC_HAS_STATIC_ASSERT
 # undef CC_HAS_STRONG_ENUMS
+# undef CC_HAS_THREAD_LOCAL
+# undef CC_HAS_UNRESTRICTED_UNIONS
+# undef CC_HAS_VARIABLE_TEMPLATES
 # undef CC_HAS_VARIADIC_TEMPLATES
 
 // Target architecture.
@@ -229,6 +245,10 @@
 // [C++ Version]
 // ----------------------------------------------------------------------------
 
+// 199711L - C++98
+// 201103L - C++11
+// 201402L - C++14
+// 201703L - C++17
 #if defined(__cplusplus)
 # if __cplusplus >= 201103L
 #  define CC_CPLUSPLUS __cplusplus
@@ -248,8 +268,6 @@
 // ----------------------------------------------------------------------------
 
 #if CC_CLANG
-# define CC_HAS_ALIGNAS                 (__has_extension(__cxx_alignas__))
-# define CC_HAS_ALIGNOF                 (__has_extension(__cxx_alignof__))
 # define CC_HAS_ASSUME                  (0)
 # define CC_HAS_ASSUME_ALIGNED          (0)
 # define CC_HAS_ATTRIBUTE               (1)
@@ -262,16 +280,28 @@
 # define CC_HAS_BUILTIN_ASSUME_ALIGNED  (__has_builtin(__builtin_assume_aligned))
 # define CC_HAS_BUILTIN_EXPECT          (__has_builtin(__builtin_expect))
 # define CC_HAS_BUILTIN_UNREACHABLE     (__has_builtin(__builtin_unreachable))
-# define CC_HAS_CONSTEXPR               (__has_extension(__cxx_constexpr__))
 # define CC_HAS_DECLSPEC_ALIGN          (0)
 # define CC_HAS_DECLSPEC_NOINLINE       (0)
 # define CC_HAS_DECLSPEC_NORETURN       (0)
-# define CC_HAS_DECLTYPE                (__has_extension(__cxx_decltype__))
-# define CC_HAS_DEFAULTED_FUNCTIONS     (__has_extension(__cxx_defaulted_functions__))
-# define CC_HAS_DELETED_FUNCTIONS       (__has_extension(__cxx_deleted_functions__))
 # define CC_HAS_FORCEINLINE             (0)
+
+# define CC_HAS_AGGREGATE_NSDMI         (__has_extension(__cxx_aggregate_nsdmi__))
+# define CC_HAS_ALIGNAS                 (__has_extension(__cxx_alignas__))
+# define CC_HAS_ALIGNOF                 (__has_extension(__cxx_alignof__))
+# define CC_HAS_AUTO_TYPE               (__has_extension(__cxx_auto_type__))
+# define CC_HAS_BINARY_LITERALS         (__has_extension(__cxx_binary_literals__))
+# define CC_HAS_CONSTEXPR               (__has_extension(__cxx_constexpr__))
+# define CC_HAS_CONTEXTUAL_CONVERSIONS  (__has_extension(__cxx_contextual_conversions__))
+# define CC_HAS_DECLTYPE                (__has_extension(__cxx_decltype__))
+# define CC_HAS_DECLTYPE_AUTO           (__has_extension(__cxx_decltype_auto__))
+# define CC_HAS_DEFAULTED_FUNCTIONS     (__has_extension(__cxx_defaulted_functions__))
+# define CC_HAS_DELEGATING_CONSTRUCTORS (__has_extension(__cxx_delegating_constructors__))
+# define CC_HAS_DELETED_FUNCTIONS       (__has_extension(__cxx_deleted_functions__))
 # define CC_HAS_FINAL                   (__has_extension(__cxx_override_control__))
-# define CC_HAS_INITIALIZER_LIST        (__has_extension(__cxx_generalized_initializers__))
+# define CC_HAS_GENERIC_LAMBDAS         (__has_extension(__cxx_generic_lambdas__))
+# define CC_HAS_INIT_CAPTURES           (__has_extension(__cxx_init_captures__))
+# define CC_HAS_INITIALIZER_LISTS       (__has_extension(__cxx_generalized_initializers__))
+# define CC_HAS_INLINE_NAMESPACES       (__has_extension(__cxx_inline_namespaces__))
 # define CC_HAS_LAMBDAS                 (__has_extension(__cxx_lambdas__))
 # define CC_HAS_NATIVE_CHAR             (1)
 # define CC_HAS_NATIVE_CHAR16_T         (__has_extension(__cxx_unicode_literals__))
@@ -280,15 +310,18 @@
 # define CC_HAS_NOEXCEPT                (__has_extension(__cxx_noexcept__))
 # define CC_HAS_NULLPTR                 (__has_extension(__cxx_nullptr__))
 # define CC_HAS_OVERRIDE                (__has_extension(__cxx_override_control__))
+# define CC_HAS_RANGE_FOR               (__has_extension(__cxx_range_for__))
+# define CC_HAS_RELAXED_CONSTEXPR       (__has_extension(__cxx_relaxed_constexpr__))
 # define CC_HAS_RVALUE_REFERENCES       (__has_extension(__cxx_rvalue_references__))
 # define CC_HAS_STATIC_ASSERT           (__has_extension(__cxx_static_assert__))
 # define CC_HAS_STRONG_ENUMS            (__has_extension(__cxx_strong_enums__))
+# define CC_HAS_THREAD_LOCAL            (__has_feature(__cxx_thread_local__))
+# define CC_HAS_UNRESTRICTED_UNIONS     (__has_feature(__cxx_unrestricted_unions__))
+# define CC_HAS_VARIABLE_TEMPLATES      (__has_extension(__cxx_variable_templates__))
 # define CC_HAS_VARIADIC_TEMPLATES      (__has_extension(__cxx_variadic_templates__))
 #endif
 
 #if CC_GNU
-# define CC_HAS_ALIGNAS                 (CC_GNU >= CC_MAKE_VER(4, 8, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_ALIGNOF                 (CC_GNU >= CC_MAKE_VER(4, 8, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_ASSUME                  (0)
 # define CC_HAS_ASSUME_ALIGNED          (0)
 # define CC_HAS_ATTRIBUTE               (1)
@@ -301,16 +334,28 @@
 # define CC_HAS_BUILTIN_ASSUME_ALIGNED  (CC_GNU >= CC_MAKE_VER(4, 7, 0))
 # define CC_HAS_BUILTIN_EXPECT          (1)
 # define CC_HAS_BUILTIN_UNREACHABLE     (CC_GNU >= CC_MAKE_VER(4, 5, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_CONSTEXPR               (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_DECLSPEC_ALIGN          (0)
 # define CC_HAS_DECLSPEC_NOINLINE       (0)
 # define CC_HAS_DECLSPEC_NORETURN       (0)
-# define CC_HAS_DECLTYPE                (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_DELETED_FUNCTIONS       (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_FORCEINLINE             (0)
+
+# define CC_HAS_AGGREGATE_NSDMI         (CC_GNU >= CC_MAKE_VER(5, 0, 0) && CC_CPLUSPLUS >= 201402L)
+# define CC_HAS_ALIGNAS                 (CC_GNU >= CC_MAKE_VER(4, 8, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_ALIGNOF                 (CC_GNU >= CC_MAKE_VER(4, 8, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_AUTO_TYPE               (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_BINARY_LITERALS         (CC_GNU >= CC_MAKE_VER(4, 9, 0) && CC_CPLUSPLUS >= 201402L)
+# define CC_HAS_CONSTEXPR               (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_CONTEXTUAL_CONVERSIONS  (CC_GNU >= CC_MAKE_VER(4, 9, 0) && CC_CPLUSPLUS >= 201402L)
+# define CC_HAS_DECLTYPE                (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_DECLTYPE_AUTO           (CC_GNU >= CC_MAKE_VER(4, 9, 0) && CC_CPLUSPLUS >= 201402L)
+# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_DELEGATING_CONSTRUCTORS (CC_GNU >= CC_MAKE_VER(4, 7, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_DELETED_FUNCTIONS       (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_FINAL                   (CC_GNU >= CC_MAKE_VER(4, 7, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_INITIALIZER_LIST        (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_GENERIC_LAMBDAS         (CC_GNU >= CC_MAKE_VER(4, 9, 0) && CC_CPLUSPLUS >= 201402L)
+# define CC_HAS_INIT_CAPTURES           (CC_GNU >= CC_MAKE_VER(4, 9, 0) && CC_CPLUSPLUS >= 201402L)
+# define CC_HAS_INITIALIZER_LISTS       (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_INLINE_NAMESPACES       (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_LAMBDAS                 (CC_GNU >= CC_MAKE_VER(4, 5, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_NATIVE_CHAR             (1)
 # define CC_HAS_NATIVE_CHAR16_T         (CC_GNU >= CC_MAKE_VER(4, 5, 0) && CC_CPLUSPLUS >= 201103L)
@@ -319,15 +364,18 @@
 # define CC_HAS_NOEXCEPT                (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_NULLPTR                 (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_OVERRIDE                (CC_GNU >= CC_MAKE_VER(4, 7, 0) && CC_CPLUSPLUS >= 201103L)
-# define CC_HAS_RVALUE_REFERENCES       (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_RANGE_FOR               (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_RELAXED_CONSTEXPR       (CC_GNU >= CC_MAKE_VER(5, 0, 0) && CC_CPLUSPLUS >= 201402L)
+# define CC_HAS_RVALUE_REFERENCES       (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_STATIC_ASSERT           (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_STRONG_ENUMS            (CC_GNU >= CC_MAKE_VER(4, 4, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_THREAD_LOCAL            (CC_GNU >= CC_MAKE_VER(4, 8, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_UNRESTRICTED_UNIONS     (CC_GNU >= CC_MAKE_VER(4, 6, 0) && CC_CPLUSPLUS >= 201103L)
+# define CC_HAS_VARIABLE_TEMPLATES      (CC_GNU >= CC_MAKE_VER(5, 0, 0) && CC_CPLUSPLUS >= 201402L)
 # define CC_HAS_VARIADIC_TEMPLATES      (CC_GNU >= CC_MAKE_VER(4, 3, 0) && CC_CPLUSPLUS >= 201103L)
 #endif
 
 #if CC_INTEL
-# define CC_HAS_ALIGNAS                 (CC_INTEL >= CC_MAKE_VER(15, 0, 0)
-# define CC_HAS_ALIGNOF                 (CC_INTEL >= CC_MAKE_VER(15, 0, 0))
 # define CC_HAS_ASSUME                  (1)
 # define CC_HAS_ASSUME_ALIGNED          (1)
 # define CC_HAS_ATTRIBUTE               (CC_INTEL_COMPAT_MODE)
@@ -340,16 +388,28 @@
 # define CC_HAS_BUILTIN_ASSUME_ALIGNED  (0)
 # define CC_HAS_BUILTIN_EXPECT          (CC_INTEL_COMPAT_MODE)
 # define CC_HAS_BUILTIN_UNREACHABLE     (0)
-# define CC_HAS_CONSTEXPR               (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
 # define CC_HAS_DECLSPEC_ALIGN          (CC_INTEL_COMPAT_MODE == 0)
 # define CC_HAS_DECLSPEC_NOINLINE       (CC_INTEL_COMPAT_MODE == 0)
 # define CC_HAS_DECLSPEC_NORETURN       (CC_INTEL_COMPAT_MODE == 0)
-# define CC_HAS_DECLTYPE                (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
-# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
-# define CC_HAS_DELETED_FUNCTIONS       (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
 # define CC_HAS_FORCEINLINE             (CC_INTEL_COMPAT_MODE == 0)
+
+# define CC_HAS_AGGREGATE_NSDMI         (CC_INTEL >= CC_MAKE_VER(16, 0, 0))
+# define CC_HAS_ALIGNAS                 (CC_INTEL >= CC_MAKE_VER(15, 0, 0))
+# define CC_HAS_ALIGNOF                 (CC_INTEL >= CC_MAKE_VER(15, 0, 0))
+# define CC_HAS_AUTO_TYPE               (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
+# define CC_HAS_BINARY_LITERALS         (CC_INTEL >= CC_MAKE_VER(11, 0, 0))
+# define CC_HAS_CONSTEXPR               (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
+# define CC_HAS_CONTEXTUAL_CONVERSIONS  (CC_INTEL >= CC_MAKE_VER(16, 0, 0))
+# define CC_HAS_DECLTYPE                (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
+# define CC_HAS_DECLTYPE_AUTO           (CC_INTEL >= CC_MAKE_VER(15, 0, 0))
+# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
+# define CC_HAS_DELEGATING_CONSTRUCTORS (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
+# define CC_HAS_DELETED_FUNCTIONS       (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
 # define CC_HAS_FINAL                   (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
-# define CC_HAS_INITIALIZER_LIST        (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
+# define CC_HAS_GENERIC_LAMBDAS         (CC_INTEL >= CC_MAKE_VER(16, 0, 0))
+# define CC_HAS_INIT_CAPTURES           (CC_INTEL >= CC_MAKE_VER(15, 0, 0))
+# define CC_HAS_INITIALIZER_LISTS       (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
+# define CC_HAS_INLINE_NAMESPACES       (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
 # define CC_HAS_LAMBDAS                 (CC_INTEL >= CC_MAKE_VER(12, 0, 0))
 # define CC_HAS_NATIVE_CHAR             (1)
 # define CC_HAS_NATIVE_CHAR16_T         (CC_INTEL >= CC_MAKE_VER(14, 0, 0) || (CC_INTEL_COMPAT_MODE > 0 && CC_INTEL >= CC_MAKE_VER(12, 6, 0)))
@@ -358,15 +418,24 @@
 # define CC_HAS_NOEXCEPT                (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
 # define CC_HAS_NULLPTR                 (CC_INTEL >= CC_MAKE_VER(12, 6, 0))
 # define CC_HAS_OVERRIDE                (CC_INTEL >= CC_MAKE_VER(14, 0, 0))
+# define CC_HAS_RANGE_FOR               (CC_INTEL >= CC_MAKE_VER(13, 0, 0))
+# define CC_HAS_RELAXED_CONSTEXPR       (CC_INTEL >= CC_MAKE_VER(17, 0, 0))
 # define CC_HAS_RVALUE_REFERENCES       (CC_INTEL >= CC_MAKE_VER(11,10, 0))
 # define CC_HAS_STATIC_ASSERT           (CC_INTEL >= CC_MAKE_VER(11,10, 0))
 # define CC_HAS_STRONG_ENUMS            (CC_INTEL >= CC_MAKE_VER(13, 0, 0))
+# define CC_HAS_THREAD_LOCAL            (CC_INTEL >= CC_MAKE_VER(15, 0, 0))
+# define CC_HAS_UNRESTRICTED_UNIONS     (CC_INTEL >= CC_MAKE_VER(14, 0, 0) && CC_INTEL_COMPAT_MODE)
+# define CC_HAS_VARIABLE_TEMPLATES      (CC_INTEL >= CC_MAKE_VER(17, 0, 0))
 # define CC_HAS_VARIADIC_TEMPLATES      (CC_INTEL >= CC_MAKE_VER(12, 6, 0))
 #endif
 
+// 16.00.0 (VS 2010)
+// 17.00.0 (VS 2012)
+// 18.00.0 (VS 2013)
+// 19.00.0 (VS 2015)
+// 19.10.0 (VS 2017)
+// 19.11.0 (VS 2017)
 #if CC_MSC
-# define CC_HAS_ALIGNAS                 (CC_MSC >= CC_MAKE_VER(19, 0, 0))
-# define CC_HAS_ALIGNOF                 (CC_MSC >= CC_MAKE_VER(19, 0, 0))
 # define CC_HAS_ASSUME                  (1)
 # define CC_HAS_ASSUME_ALIGNED          (0)
 # define CC_HAS_ATTRIBUTE               (0)
@@ -379,16 +448,28 @@
 # define CC_HAS_BUILTIN_ASSUME_ALIGNED  (0)
 # define CC_HAS_BUILTIN_EXPECT          (0)
 # define CC_HAS_BUILTIN_UNREACHABLE     (0)
-# define CC_HAS_CONSTEXPR               (CC_MSC >= CC_MAKE_VER(19, 0, 0))
 # define CC_HAS_DECLSPEC_ALIGN          (1)
 # define CC_HAS_DECLSPEC_NOINLINE       (1)
 # define CC_HAS_DECLSPEC_NORETURN       (1)
-# define CC_HAS_DECLTYPE                (CC_MSC >= CC_MAKE_VER(16, 0, 0))
-# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_MSC >= CC_MAKE_VER(18, 0, 0))
-# define CC_HAS_DELETED_FUNCTIONS       (CC_MSC >= CC_MAKE_VER(18, 0, 0))
 # define CC_HAS_FORCEINLINE             (1)
+
+# define CC_HAS_AGGREGATE_NSDMI         (CC_MSC >= CC_MAKE_VER(19, 10, 0))
+# define CC_HAS_ALIGNAS                 (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_ALIGNOF                 (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_AUTO_TYPE               (CC_MSC >= CC_MAKE_VER(16, 0, 0))
+# define CC_HAS_BINARY_LITERALS         (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_CONSTEXPR               (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_CONTEXTUAL_CONVERSIONS  (CC_MSC >= CC_MAKE_VER(18, 0, 0))
+# define CC_HAS_DECLTYPE                (CC_MSC >= CC_MAKE_VER(16, 0, 0))
+# define CC_HAS_DECLTYPE_AUTO           (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_DEFAULTED_FUNCTIONS     (CC_MSC >= CC_MAKE_VER(18, 0, 0))
+# define CC_HAS_DELEGATING_CONSTRUCTORS (CC_MSC >= CC_MAKE_VER(18, 0, 0))
+# define CC_HAS_DELETED_FUNCTIONS       (CC_MSC >= CC_MAKE_VER(18, 0, 0))
 # define CC_HAS_FINAL                   (CC_MSC >= CC_MAKE_VER(14, 0, 0))
-# define CC_HAS_INITIALIZER_LIST        (CC_MSC >= CC_MAKE_VER(18, 0, 0))
+# define CC_HAS_GENERIC_LAMBDAS         (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_INIT_CAPTURES           (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_INITIALIZER_LISTS       (CC_MSC >= CC_MAKE_VER(18, 0, 0))
+# define CC_HAS_INLINE_NAMESPACES       (CC_MSC >= CC_MAKE_VER(19, 0, 0))
 # define CC_HAS_LAMBDAS                 (CC_MSC >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_NATIVE_CHAR             (1)
 # define CC_HAS_NATIVE_CHAR16_T         (CC_MSC >= CC_MAKE_VER(19, 0, 0))
@@ -401,9 +482,14 @@
 # define CC_HAS_NOEXCEPT                (CC_MSC >= CC_MAKE_VER(19, 0, 0))
 # define CC_HAS_NULLPTR                 (CC_MSC >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_OVERRIDE                (CC_MSC >= CC_MAKE_VER(14, 0, 0))
+# define CC_HAS_RANGE_FOR               (CC_MSC >= CC_MAKE_VER(17, 0, 0))
+# define CC_HAS_RELAXED_CONSTEXPR       (CC_MSC >= CC_MAKE_VER(19, 10, 0))
 # define CC_HAS_RVALUE_REFERENCES       (CC_MSC >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_STATIC_ASSERT           (CC_MSC >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_STRONG_ENUMS            (CC_MSC >= CC_MAKE_VER(14, 0, 0))
+# define CC_HAS_THREAD_LOCAL            (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_UNRESTRICTED_UNIONS     (CC_MSC >= CC_MAKE_VER(19, 0, 0))
+# define CC_HAS_VARIABLE_TEMPLATES      (CC_MSC >= CC_MAKE_VER(19, 0, 0))
 # define CC_HAS_VARIADIC_TEMPLATES      (CC_MSC >= CC_MAKE_VER(18, 0, 0))
 #endif
 
