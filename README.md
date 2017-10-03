@@ -147,10 +147,6 @@ Standardized:
   * `CC_HAS_INITIALIZER_LISTS`       - Initializer lists  (C++11).
   * `CC_HAS_INLINE_NAMESPACES`       - Inline namespaces  (C++11).
   * `CC_HAS_LAMBDAS`                 - Lambda functions  (C++11).
-  * `CC_HAS_NATIVE_CHAR`             - Native `char` type (`char`, `signed char`, and `unsigned char` are different types in such case).
-  * `CC_HAS_NATIVE_WCHAR_T`          - Native `wchar_t` type.
-  * `CC_HAS_NATIVE_CHAR16_T`         - Native `char16_t` type  (C++11).
-  * `CC_HAS_NATIVE_CHAR32_T`         - Native `char32_t` type  (C++11).
   * `CC_HAS_NOEXCEPT`                - `noexcept` keyword  (C++11).
   * `CC_HAS_NULLPTR`                 - `nullptr` keyword  (C++11).
   * `CC_HAS_OVERRIDE`                - `override` keyword  (C++11).
@@ -160,11 +156,20 @@ Standardized:
   * `CC_HAS_STATIC_ASSERT`           - `static_assert` keyword  (C++11).
   * `CC_HAS_STRONG_ENUMS`            - Strongly typed enums  (C++11).
   * `CC_HAS_THREAD_LOCAL`            - `thread_local` keyword  (C++11).
+  * `CC_HAS_UNICODE_LITERALS`        - Unicode literals  (C++11).
   * `CC_HAS_UNRESTRICTED_UNIONS`     - Unrestricted unions  (C++11).
   * `CC_HAS_VARIABLE_TEMPLATES`      - Variable templates  (C++14).
   * `CC_HAS_VARIADIC_TEMPLATES`      - Variadic templates  (C++11).
+  * (note: all macro names should correspond to the name of the feature as used by clang's `__has_feature()` macro)
 
-Since all macros are defined, just their constants differ, features can be checked the following way:
+Type System:
+
+  * `CC_HAS_NATIVE_CHAR`             - Native `char` type.
+  * `CC_HAS_NATIVE_WCHAR_T`          - Native `wchar_t` type.
+  * `CC_HAS_NATIVE_CHAR16_T`         - Native `char16_t` type  (C++11), always matches `CC_HAS_UNICODE_LITERALS`.
+  * `CC_HAS_NATIVE_CHAR32_T`         - Native `char32_t` type  (C++11), always matches `CC_HAS_UNICODE_LITERALS`.
+
+Since all macros are always defined features can be checked by the following way:
 
 ```c++
 #if !CC_HAS_STRONG_ENUMS       || \
@@ -180,8 +185,9 @@ Another example:
 class SomeClass {
   SomeClass() {}
 
-  #if CC_HAS_RVALUE
-  SomeClass(SomeClass&& other) { ...} // Move semantics
+  // Move semantics
+  #if CC_HAS_RVALUE_REFERENCES
+  SomeClass(SomeClass&& other) { ... }
   #endif
 }
 ```
@@ -265,15 +271,15 @@ Function Attributes & Calling Conventions
 Calling Conventions:
 
   * `CC_CDECL`                      - CDECL calling convention.
-  * `CC_STDCALL`                    - STDCALL calling convention.
-  * `CC_FASTCALL`                   - FASTCALL calling convention.
+  * `CC_STDCALL`                    - STDCALL calling convention (32-bit X86).
+  * `CC_FASTCALL`                   - FASTCALL calling convention (32-bit X86).
   * `CC_REGPARM(N)`                 - REGPARM(N) calling convention (GCC and Clang).
 
 Function Attributes:
 
-  * `CC_FORCEINLINE`                - Force to always inline a certain function.
-  * `CC_NOINLINE`                   - Force to never inline a certain function.
-  * `CC_NORETURN`                   - Function never returns.
+  * `CC_FORCEINLINE`                - Function should be always inlined.
+  * `CC_NOINLINE`                   - Function should be never inlined.
+  * `CC_NORETURN`                   - Function doesn't return (abort, etc).
 
 Example:
 
@@ -293,7 +299,7 @@ CC_FORCEINLINE uint32_t PerformanceCriticalFunction(uint32_t x, uint32_t y) {}
 CC_NOINLINE uint32_t FunctionThatShouldNeverBeInlined(uint32_t x, uint32_t y) {}
 
 // Never returns.
-CC_NORETURN void Crash() { ::abort(); }
+CC_NORETURN void Terminate() { ::abort(); }
 
 uint32_t SomeFunc(void *p) {
   if (CC_LIKELY(p)) {
@@ -301,10 +307,9 @@ uint32_t SomeFunc(void *p) {
     return 0;
   }
   else {
-    // Runtime error. Since Crash() is decorated by CC_NORETURN the
-    // compiler knows it will never return and will not emit warning
-    // about a missing `return`.
-    Crash();
+    // Runtime error. Since Terminate() has CC_NORETURN attribute
+    // the compiler will not emit a warning about a missing return.
+    Terminate();
   }
 }
 
