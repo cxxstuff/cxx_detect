@@ -76,8 +76,8 @@
 // C/C++ Compiler vendor and vendor details
 # undef CC_CLANG
 # undef CC_GNU
+# undef CC_GNU_COMPAT
 # undef CC_INTEL
-# undef CC_INTEL_COMPAT_MODE
 # undef CC_MSC
 # undef CC_MINGW
 # undef CC_MAKE_VER
@@ -92,6 +92,7 @@
 # undef CC_HAS_ATTRIBUTE_ALIGNED
 # undef CC_HAS_ATTRIBUTE_ALWAYS_INLINE
 # undef CC_HAS_ATTRIBUTE_NOINLINE
+# undef CC_HAS_ATTRIBUTE_DEPRECATED
 # undef CC_HAS_ATTRIBUTE_NORETURN
 # undef CC_HAS_ATTRIBUTE_OPTIMIZE
 # undef CC_HAS_BUILTIN_ASSUME
@@ -99,6 +100,7 @@
 # undef CC_HAS_BUILTIN_EXPECT
 # undef CC_HAS_BUILTIN_UNREACHABLE
 # undef CC_HAS_DECLSPEC_ALIGN
+# undef CC_HAS_DECLSPEC_DEPRECATED
 # undef CC_HAS_DECLSPEC_NOINLINE
 # undef CC_HAS_DECLSPEC_NORETURN
 # undef CC_HAS_FORCEINLINE
@@ -171,6 +173,9 @@
 # undef CC_STDCALL
 # undef CC_FASTCALL
 # undef CC_REGPARM
+# undef CC_FORCEINLINE
+# undef CC_NOINLINE
+# undef CC_NORETURN
 
 // Likely / unlikely.
 # undef CC_LIKELY
@@ -180,17 +185,16 @@
 # undef CC_ASSUME
 # undef CC_ASSUME_ALIGNED
 
+// Annotations.
+# undef CC_UNUSED
+# undef CC_FALLTHROUGH
+
 // Other macros.
 # undef CC_ALIGN_DECL
 # undef CC_ALIGN_TYPE
-# undef CC_FALLTHROUGH
-# undef CC_FORCEINLINE
-# undef CC_NOINLINE
-# undef CC_NORETURN
-# undef CC_UNUSED
 
 # undef CC_ARRAY_SIZE
-# undef CC_OFFSET_OF(STRUCT, MEMBER) ((size_t)((const char*)&((const STRUCT*)0x1)->MEMBER) - 1)
+# undef CC_OFFSET_OF
 
 #endif
 
@@ -235,11 +239,15 @@
 # define CC_MINGW 0
 #endif
 
-// CC_INTEL_COMPAT_MODE - C++ compiler is INTEL in GNU/Clang compatibility mode.
-#if CC_INTEL && (defined(__GNUC__) || defined(__clang__))
-# define CC_INTEL_COMPAT_MODE 1
+// CC_GNU_COMPAT - C++ compiler is not GNU but pretends to be, like ICC.
+#if defined(__GNUC__) && !defined(__GNUC_MINOR__)
+# define CC_GNU_COMPAT CC_MAKE_VER(__GNUC__, 0, 0)
+#elif defined(__GNUC__) && !defined(__GNUC_PATCHLEVEL__)
+# define CC_GNU_COMPAT CC_MAKE_VER(__GNUC__, __GNUC_MINOR__, 0)
+#elif defined(__GNUC__)
+# define CC_GNU_COMPAT CC_MAKE_VER(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__)
 #else
-# define CC_INTEL_COMPAT_MODE 0
+# define CC_GNU_COMPAT 0
 #endif
 
 // ----------------------------------------------------------------------------
@@ -274,6 +282,7 @@
 # define CC_HAS_ATTRIBUTE               (1)
 # define CC_HAS_ATTRIBUTE_ALIGNED       (__has_attribute(__aligned__))
 # define CC_HAS_ATTRIBUTE_ALWAYS_INLINE (__has_attribute(__always_inline__))
+# define CC_HAS_ATTRIBUTE_DEPRECATED    (__has_attribute(__deprecated__) && __has_extension(__attribute_deprecated_with_message__))
 # define CC_HAS_ATTRIBUTE_NOINLINE      (__has_attribute(__noinline__))
 # define CC_HAS_ATTRIBUTE_NORETURN      (__has_attribute(__noreturn__))
 # define CC_HAS_ATTRIBUTE_OPTIMIZE      (__has_attribute(__optimize__))
@@ -282,6 +291,7 @@
 # define CC_HAS_BUILTIN_EXPECT          (__has_builtin(__builtin_expect))
 # define CC_HAS_BUILTIN_UNREACHABLE     (__has_builtin(__builtin_unreachable))
 # define CC_HAS_DECLSPEC_ALIGN          (0)
+# define CC_HAS_DECLSPEC_DEPRECATED     (0)
 # define CC_HAS_DECLSPEC_NOINLINE       (0)
 # define CC_HAS_DECLSPEC_NORETURN       (0)
 # define CC_HAS_FORCEINLINE             (0)
@@ -330,6 +340,7 @@
 # define CC_HAS_ATTRIBUTE               (1)
 # define CC_HAS_ATTRIBUTE_ALIGNED       (CC_GNU >= CC_MAKE_VER(2, 7, 0))
 # define CC_HAS_ATTRIBUTE_ALWAYS_INLINE (CC_GNU >= CC_MAKE_VER(4, 4, 0) && !CC_MINGW)
+# define CC_HAS_ATTRIBUTE_DEPRECATED    (CC_GNU >= CC_MAKE_VER(4, 5, 0))
 # define CC_HAS_ATTRIBUTE_NOINLINE      (CC_GNU >= CC_MAKE_VER(3, 4, 0) && !CC_MINGW)
 # define CC_HAS_ATTRIBUTE_NORETURN      (CC_GNU >= CC_MAKE_VER(2, 5, 0))
 # define CC_HAS_ATTRIBUTE_OPTIMIZE      (CC_GNU >= CC_MAKE_VER(4, 4, 0))
@@ -338,6 +349,7 @@
 # define CC_HAS_BUILTIN_EXPECT          (1)
 # define CC_HAS_BUILTIN_UNREACHABLE     (CC_GNU >= CC_MAKE_VER(4, 5, 0) && CC_CPLUSPLUS >= 201103L)
 # define CC_HAS_DECLSPEC_ALIGN          (0)
+# define CC_HAS_DECLSPEC_DEPRECATED     (0)
 # define CC_HAS_DECLSPEC_NOINLINE       (0)
 # define CC_HAS_DECLSPEC_NORETURN       (0)
 # define CC_HAS_FORCEINLINE             (0)
@@ -383,20 +395,22 @@
 #if CC_INTEL
 # define CC_HAS_ASSUME                  (1)
 # define CC_HAS_ASSUME_ALIGNED          (1)
-# define CC_HAS_ATTRIBUTE               (CC_INTEL_COMPAT_MODE)
-# define CC_HAS_ATTRIBUTE_ALIGNED       (CC_INTEL_COMPAT_MODE)
-# define CC_HAS_ATTRIBUTE_ALWAYS_INLINE (CC_INTEL_COMPAT_MODE)
-# define CC_HAS_ATTRIBUTE_NOINLINE      (CC_INTEL_COMPAT_MODE)
-# define CC_HAS_ATTRIBUTE_NORETURN      (CC_INTEL_COMPAT_MODE)
-# define CC_HAS_ATTRIBUTE_OPTIMIZE      (CC_INTEL_COMPAT_MODE)
+# define CC_HAS_ATTRIBUTE               (CC_GNU_COMPAT >= 1)
+# define CC_HAS_ATTRIBUTE_ALIGNED       (CC_GNU_COMPAT >= 1)
+# define CC_HAS_ATTRIBUTE_ALWAYS_INLINE (CC_GNU_COMPAT >= 1)
+# define CC_HAS_ATTRIBUTE_DEPRECATED    (CC_GNU_COMPAT >= 1)
+# define CC_HAS_ATTRIBUTE_NOINLINE      (CC_GNU_COMPAT >= 1)
+# define CC_HAS_ATTRIBUTE_NORETURN      (CC_GNU_COMPAT >= 1)
+# define CC_HAS_ATTRIBUTE_OPTIMIZE      (CC_GNU_COMPAT >= 1)
 # define CC_HAS_BUILTIN_ASSUME          (0)
 # define CC_HAS_BUILTIN_ASSUME_ALIGNED  (0)
-# define CC_HAS_BUILTIN_EXPECT          (CC_INTEL_COMPAT_MODE)
+# define CC_HAS_BUILTIN_EXPECT          (CC_GNU_COMPAT >= 1)
 # define CC_HAS_BUILTIN_UNREACHABLE     (0)
-# define CC_HAS_DECLSPEC_ALIGN          (CC_INTEL_COMPAT_MODE == 0)
-# define CC_HAS_DECLSPEC_NOINLINE       (CC_INTEL_COMPAT_MODE == 0)
-# define CC_HAS_DECLSPEC_NORETURN       (CC_INTEL_COMPAT_MODE == 0)
-# define CC_HAS_FORCEINLINE             (CC_INTEL_COMPAT_MODE == 0)
+# define CC_HAS_DECLSPEC_ALIGN          (CC_GNU_COMPAT == 0)
+# define CC_HAS_DECLSPEC_DEPRECATED     (CC_GNU_COMPAT == 0)
+# define CC_HAS_DECLSPEC_NOINLINE       (CC_GNU_COMPAT == 0)
+# define CC_HAS_DECLSPEC_NORETURN       (CC_GNU_COMPAT == 0)
+# define CC_HAS_FORCEINLINE             (CC_GNU_COMPAT == 0)
 
 # define CC_HAS_AGGREGATE_NSDMI         (CC_INTEL >= CC_MAKE_VER(16, 0, 0))
 # define CC_HAS_ALIGNAS                 (CC_INTEL >= CC_MAKE_VER(15, 0, 0))
@@ -425,8 +439,8 @@
 # define CC_HAS_STATIC_ASSERT           (CC_INTEL >= CC_MAKE_VER(11,10, 0))
 # define CC_HAS_STRONG_ENUMS            (CC_INTEL >= CC_MAKE_VER(13, 0, 0))
 # define CC_HAS_THREAD_LOCAL            (CC_INTEL >= CC_MAKE_VER(15, 0, 0))
-# define CC_HAS_UNICODE_LITERALS        (CC_INTEL >= CC_MAKE_VER(14, 0, 0) || (CC_INTEL_COMPAT_MODE > 0 && CC_INTEL >= CC_MAKE_VER(12, 6, 0)))
-# define CC_HAS_UNRESTRICTED_UNIONS     (CC_INTEL >= CC_MAKE_VER(14, 0, 0) && CC_INTEL_COMPAT_MODE)
+# define CC_HAS_UNICODE_LITERALS        (CC_INTEL >= CC_MAKE_VER(14, 0, 0) || (CC_GNU_COMPAT > 0 && CC_INTEL >= CC_MAKE_VER(12, 6, 0)))
+# define CC_HAS_UNRESTRICTED_UNIONS     (CC_INTEL >= CC_MAKE_VER(14, 0, 0) && CC_GNU_COMPAT)
 # define CC_HAS_VARIABLE_TEMPLATES      (CC_INTEL >= CC_MAKE_VER(17, 0, 0))
 # define CC_HAS_VARIADIC_TEMPLATES      (CC_INTEL >= CC_MAKE_VER(12, 6, 0))
 
@@ -448,6 +462,7 @@
 # define CC_HAS_ATTRIBUTE               (0)
 # define CC_HAS_ATTRIBUTE_ALIGNED       (0)
 # define CC_HAS_ATTRIBUTE_ALWAYS_INLINE (0)
+# define CC_HAS_ATTRIBUTE_DEPRECATED    (0)
 # define CC_HAS_ATTRIBUTE_NOINLINE      (0)
 # define CC_HAS_ATTRIBUTE_NORETURN      (0)
 # define CC_HAS_ATTRIBUTE_OPTIMIZE      (0)
@@ -456,6 +471,7 @@
 # define CC_HAS_BUILTIN_EXPECT          (0)
 # define CC_HAS_BUILTIN_UNREACHABLE     (0)
 # define CC_HAS_DECLSPEC_ALIGN          (1)
+# define CC_HAS_DECLSPEC_DEPRECATED     (1)
 # define CC_HAS_DECLSPEC_NOINLINE       (1)
 # define CC_HAS_DECLSPEC_NORETURN       (1)
 # define CC_HAS_FORCEINLINE             (1)
@@ -631,7 +647,7 @@
 #  define CC_IMPORT __declspec(dllimport)
 # endif
 #else
-# if CC_CLANG || CC_GNU >= CC_MAKE_VER(4, 0, 0) || CC_INTEL_COMPAT_MODE
+# if CC_CLANG || CC_GNU >= CC_MAKE_VER(4, 0, 0) || CC_GNU_COMPAT
 #  define CC_EXPORT __attribute__((__visibility__("default")))
 #  define CC_IMPORT
 # else
@@ -756,7 +772,7 @@
 // ----------------------------------------------------------------------------
 
 #define CC_ARRAY_SIZE(X) (sizeof(X) / sizeof((X)[0]))
-#define CC_OFFSET_OF(STRUCT, MEMBER) ((size_t)((const char*)&((const STRUCT*)0x1)->MEMBER) - 1)
+#define CC_OFFSET_OF(STRUCT, MEMBER) ((size_t)((const char*)&((const (STRUCT)*)0x1)->MEMBER) - 1)
 
 // ============================================================================
 // [Guard]

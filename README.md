@@ -73,8 +73,8 @@ Each compiler-vendor constant contains either 0, which means the compiler was no
 
 Additionally the following constants are provided:
 
+  * `CC_GNU_COMPAT` - GNU compatibility mode, contains the version of GCC the compiler pretents to be. Please note that the version is not relyable, for example Clang 4.0.1 with C++11 enabled pretends to be GCC 4.2.1, which doesn't support C++11. GNU compat mode is also used by Intel compiler.
   * `CC_MINGW` - 0 if not MINGW, 32 if `__MINGW32__` is defined, or 64 if `__MINGW64__` is defined
-  * `CC_INTEL_COMPAT_MODE` - Intel compiler is in GNU/Clang compatibility mode (1) or not (0).
 
 The compilers are checked the following way:
 
@@ -100,6 +100,16 @@ If you need a compiler version you can use arithmetic operators and `CC_MAKE_VER
 #endif
 ```
 
+Some compilers pretend to be GNU, you can check for `CC_GNU_COMPAT` if you rely on GCC/Clang `__attribute__` or anything else:
+
+```c++
+#if CC_GNU_COMPAT // Or CC_GNU_COMPAT >= CC_MAKE_VER(X, Y, Z), which is not reliable.
+// Use GNU compatible stuff.
+#endif
+```
+
+Please note that if the compiler is not GNU the `CC_GNU` will always be 0 even if the compiler defines `__GNUC__`. So checking `__GNUC__` is not the same as checking `CC_GNU`. Use `CC_GNU_COMPAT` in such case, which will be set always accordingly to the GNU compatibilty level.
+
 C/C++ Language Version
 ----------------------
 
@@ -115,7 +125,8 @@ Vendor Specific:
   * `CC_HAS_ATTRIBUTE`               - `__attribute__` in general.
   * `CC_HAS_ATTRIBUTE_ALIGNED`       - `__attribute__(__aligned__)`.
   * `CC_HAS_ATTRIBUTE_ALWAYS_INLINE` - `__attribute__(__always_inline__)`.
-  * `CC_HAS_ATTRIBUTE_NOINLINE`      - `__attribute__(__aligned__)`.
+  * `CC_HAS_ATTRIBUTE_DEPRECATED`    - `__attribute__(__deprecated__)`.
+  * `CC_HAS_ATTRIBUTE_NOINLINE`      - `__attribute__(__noinline__)`.
   * `CC_HAS_ATTRIBUTE_NORETURN`      - `__attribute__(__noreturn__)`.
   * `CC_HAS_ATTRIBUTE_OPTIMIZE`      - `__attribute__(__optimize__)`.
   * `CC_HAS_BUILTIN_ASSUME`          - `__builtin_assume()`.
@@ -123,6 +134,7 @@ Vendor Specific:
   * `CC_HAS_BUILTIN_EXPECT`          - `__builtin_expect()`.
   * `CC_HAS_BUILTIN_UNREACHABLE`     - `__builtin_unreachable()`.
   * `CC_HAS_DECLSPEC_ALIGN`          - `__declspec(align)`.
+  * `CC_HAS_DECLSPEC_DEPRECATED`     - `__declspec(deprecated)` and __declspec(deprecated("msg")).
   * `CC_HAS_DECLSPEC_NOINLINE`       - `__declspec(noinline)`.
   * `CC_HAS_DECLSPEC_NORETURN`       - `__declspec(noreturn)`.
   * `CC_HAS_FORCEINLINE`             - `__forceinline` keyword.
